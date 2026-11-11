@@ -625,8 +625,12 @@ const RelationsInput = ({
        *
        */
       onChange(relation);
+
+      // The combobox text is cleared once a relation is selected, so the search must follow,
+      // otherwise reopening the dropdown would list results for the stale search term.
+      setSearchParams((s) => ({ ...s, _q: '', page: 1 }));
     },
-    [data, formatMessage, onChange, toggleNotification]
+    [data, formatMessage, onChange, toggleNotification, setSearchParams]
   );
 
   const relation = React.useMemo(
@@ -797,7 +801,11 @@ const RelationModalWithContext = ({
           }
           hasMoreItems={hasNextPage}
           loading={isLoadingSearchRelations || isLoadingPermissions}
-          onOpenChange={() => {
+          onOpenChange={(isOpen?: boolean) => {
+            if (isOpen === false) {
+              return;
+            }
+
             handleSearch(textValue ?? '');
           }}
           noOptionsMessage={() =>

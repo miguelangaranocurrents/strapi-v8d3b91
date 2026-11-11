@@ -126,6 +126,11 @@ const relationsApi = contentManagerApi.injectEndpoints({
           endpointName,
           model: queryArgs.model,
           targetField: queryArgs.targetField,
+          // Components of the same type (e.g. in a dynamic zone) share model & targetField,
+          // so the source entity id/locale/status must be part of the cache key.
+          id: queryArgs.params?.id,
+          locale: queryArgs.params?.locale,
+          status: queryArgs.params?.status,
           _q: queryArgs.params?._q,
           idsToOmit: queryArgs.params?.idsToOmit,
           idsToInclude: queryArgs.params?.idsToInclude,
